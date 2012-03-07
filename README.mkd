@@ -8,8 +8,11 @@
 
 ## Requirements
 
-This plugin requires the Perl `DateTime` module as well as
-`DateTime::Event::Ical`.
+This plugin requires the following perl modules:
+
+* `DateTime`
+* `DateTime::Event::Ical`
+* `Date::Parse` (distributed as a part of the TimeDate distribution)
 
 
 ## Usage
