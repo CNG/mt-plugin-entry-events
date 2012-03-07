@@ -36,6 +36,7 @@ sub build_event_template {
         my $event = $entry_event->{event};
         my $event_date = epoch2ts(undef, $entry_event->epoch);
         my $entry = MT::Entry->load($event->entry_id);
+        next if $entry->status != MT::Entry::RELEASE();
         local $ctx->{__stash}{blog} = $entry->blog;
         local $ctx->{__stash}{blog_id} = $entry->blog_id;
         local $ctx->{__stash}{entry} = $entry;
