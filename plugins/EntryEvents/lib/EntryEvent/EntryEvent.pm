@@ -86,4 +86,12 @@ sub get_next_occurrence {
     }
 }
 
+sub parents {
+    my $obj = shift;
+    {
+        blog_id  => MT->model('blog'),
+        entry_id => MT->model('entry'),
+    };
+}
+
 1;
