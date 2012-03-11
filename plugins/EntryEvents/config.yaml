@@ -15,6 +15,10 @@ settings:
 object_types:
     entryevent: EntryEvent::EntryEvent
 
+backup_instructions:
+    entryevent:
+        order: 550
+
 callbacks:
     MT::App::CMS::template_source.edit_entry: $EntryEvent::EntryEvent::CMS::source_edit_entry
     MT::App::CMS::template_param.edit_entry: $EntryEvent::EntryEvent::CMS::param_edit_entry
