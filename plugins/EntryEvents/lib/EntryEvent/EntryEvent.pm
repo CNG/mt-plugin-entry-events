@@ -37,7 +37,7 @@ __PACKAGE__->install_properties({
     },
     datasource => 'entryevent',
     primary_key => 'id',
-    child_of    => 'MT::Entry',
+    child_of    => ['MT::Entry', 'MT::Blog'],
     meta => 1,
 });
 
