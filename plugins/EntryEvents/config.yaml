@@ -13,7 +13,7 @@ settings:
         default: 0
 
 object_types:
-    entry_event: EntryEvent::EntryEvent
+    entryevent: EntryEvent::EntryEvent
 
 callbacks:
     MT::App::CMS::template_source.edit_entry: $EntryEvent::EntryEvent::CMS::source_edit_entry
