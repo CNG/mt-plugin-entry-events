@@ -158,11 +158,6 @@ sub post_save_entry {
 
 }
 
-sub post_remove_entry {
-    my ($cb, $entry) = @_;
-    my $remove = EntryEvent::EntryEvent->remove({ entry_id => $entry->id });
-}
-
 sub get_ical_params {
     my $app = shift;
     my ($entry, $ts) = @_;
