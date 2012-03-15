@@ -148,3 +148,87 @@ relationship with an entry which means that future recurrences of an event will
 end up having the same comments. If you end up wanting events that have
 different comments from occurrence to occurrence, I would recommend creating
 new entries for each one.
+
+## mt-search Integration
+
+### 'entry_events' query parameter
+
+The EntryEvents plugin provides integration with mt-search and search provided
+by the FieldDay plugin via an 'entry_events' query parameter / form field.  The
+'entry_events' query paramter / form field may be used to filter (limit) search
+results to entries having an entry event date or an entry event recurrence date
+within a specified time period.
+
+Format of 'entry_events' value:
+`"start:YYYYMMDDHHMMSS,end:YYYYMMDDHHMMSS,days:nn"`
+
+All parameters (start, end, days) are optional, must be separated by a comma, 
+and may be present in any order.  Parameter name must be separated from 
+parameter value by a colon (":").
+
+* **start:**  
+    Beginning of time period to look for entry events and event recurrences 
+    occurring on or after.  Entry with event or event recurrence occurring 
+    exactly at start time *will* be returned in search results.
+    
+    Format: `YYYYMMDDHHMMSS`
+    
+    Default value: Current date/time using timezone from first blog being searched.
+
+
+* **end:**  
+    End of time period to look for entry events and event recurrences.  Entry 
+    with event or event recurrence occurring exactly at end time *will not* be 
+    returned in search results.
+    
+    Format: `YYYYMMDDHHMMSS`
+    
+    Default value: (none)
+    
+    If both 'end' and 'days' are specified, 'days' overrides 'end'.
+ 
+
+* **days:**  
+    Number of days to search for events and event recurrences after 'start' 
+    date/time.
+    
+    Default value: 7 if neither 'days' nor 'end' are specified.
+
+#### Examples:
+
+1. `<input type="hidden" name="entry_events" value="start:20111004000000,days:1" />`  
+    Result: Filter search results to entries with events or event recurrences
+    occurring on or after 2011-10-04 12:00:00am and up to 1 day after (up to, 
+    but not including, 2011-10-05 12:00:00am).
+ 
+
+2. `<input type="hidden" name="entry_events" value="start:20111004000000,end:20111005000000" />`  
+    Result: Same as previous example - filter search results to entries with
+    events or event recurrences on or after 2011-10-04 12:00:00am and up to,
+    but not including, 2011-10-05 12:00:00am.
+ 
+
+3. `<input type="hidden" name="entry_events" value="start:20111004000000" />`  
+    Result: No 'days' and no 'end' parameters, so default 'days' value of '7'
+    is used.  Filter search results to entries with events or event recurrences
+    occurring on or after 2011-10-04 12:00:00am and up to, but not including,
+    2011-10-11 12:00:00am.
+
+
+### Sorting of search results by entry event date ('SortByEntryEvent')
+
+If search results have been filtered using the 'entry_events' query parameter /
+form field described above, search results may be sorted by the next entry event
+recurrence date (the next event recurrence date for an entry occurring on or 
+after the 'start' date, but before the 'end' date).  To sort search results by
+the next entry event recurrence date, include a `SortByEntryEvent` query
+parameter / form field, set to a value of '1'.
+
+When `SortByEntryEvent` is enabled, sorting by next entry event recurrence
+date takes priority over any normal / default sort fields specified by a 
+SearchSortBy query parameter / form field / configuration directive, and the
+normal / default sort fields become secondary sort fields used to order search
+results when two entries have the same event date.
+
+Direction of sorting when `SortByEntryEvent` is enabled follows the setting of
+the SearchResultDisplay query parameter / form field / configuration directive.
