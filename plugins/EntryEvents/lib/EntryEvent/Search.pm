@@ -85,7 +85,16 @@ sub _filter_by_event {
     my @entry_ids;
     # Load entry events from all blogs being searched
     my @blog_ids = keys(%{$app->{searchparam}{IncludeBlogs}});
-    my $event_iter = EntryEvent::EntryEvent->load_iter({ blog_id => \@blog_ids });
+    my $event_iter = EntryEvent::EntryEvent->load_iter(
+                        { blog_id => \@blog_ids },
+                        {
+                          join => MT::Entry->join_on( undef,
+                                  { id => \'= entryevent_entry_id',
+                                    status => 2 },
+                                  { unique => 1 },
+                              )
+                        },
+                    );
     while ( my $event = $event_iter->() ) {
         my $event_date = $event->get_next_occurrence($start);
         if ( $event_date && ($event_date < $end) ) {
