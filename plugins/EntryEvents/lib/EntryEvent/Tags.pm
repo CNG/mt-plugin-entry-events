@@ -219,7 +219,10 @@ sub featured_container { # just find featured events
     my $tag = lc $ctx->stash('tag');
 
     my @events;
-    my @load_events = EntryEvent::EntryEvent->load({ featured => 1 }, { limit => $limit }) or return '';
+    my @load_events = EntryEvent::EntryEvent->load(
+                          { blog_id => $blog->id, featured => 1 },
+                          { limit => $limit }
+                      ) or return '';
 
     for my $event (@load_events) {
         if (my $ical = $event->ical) {
