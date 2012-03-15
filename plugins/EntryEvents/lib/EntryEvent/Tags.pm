@@ -207,7 +207,7 @@ sub featured_container { # just find featured events
     my $blog = $ctx->stash('blog');
 
     my $limit = $args->{limit};
-    my $start = $args->{start} || epoch2ts(undef, time);
+    my $start = $args->{start} || epoch2ts($blog, time);
 
     if ($start) {
         # start is passed as YYYYMMDDHHMMSS so parse that to a DateTime obj
