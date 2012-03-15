@@ -209,10 +209,8 @@ sub featured_container { # just find featured events
     my $limit = $args->{limit};
     my $start = $args->{start} || epoch2ts($blog, time);
 
-    if ($start) {
-        # start is passed as YYYYMMDDHHMMSS so parse that to a DateTime obj
-        $start = ts2datetime($start);
-    }
+    # start is passed as YYYYMMDDHHMMSS so parse that to a DateTime obj
+    $start = ts2datetime($start);
 
 
     my $check_set = DateTime::Span->from_datetimes( start => $start );
