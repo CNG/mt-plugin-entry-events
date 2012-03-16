@@ -219,7 +219,7 @@ sub featured_container { # just find featured events
     my $tag = lc $ctx->stash('tag');
 
     my @events;
-    my @load_events = EntryEvent::EntryEvent->load(
+    my $event_iter = EntryEvent::EntryEvent->load_iter(
                           { blog_id => $blog->id, featured => 1 },
                           { limit => $limit,
                             join => MT::Entry->join_on( undef,
@@ -230,7 +230,7 @@ sub featured_container { # just find featured events
                            }
                       ) or return '';
 
-    for my $event (@load_events) {
+    while ( my $event = $event_iter->() ) {
         if (my $ical = $event->ical) {
             # doing some datetime intersection stuff with our start and end dates to find out whether our event
             # falls within the provided dates (or just one date)
