@@ -221,7 +221,13 @@ sub featured_container { # just find featured events
     my @events;
     my @load_events = EntryEvent::EntryEvent->load(
                           { blog_id => $blog->id, featured => 1 },
-                          { limit => $limit }
+                          { limit => $limit,
+                            join => MT::Entry->join_on( undef,
+                                    { id => \'= entryevent_entry_id',
+                                      status => MT::Entry::RELEASE() },
+                                    { unique => 1 },
+                                 )
+                           }
                       ) or return '';
 
     for my $event (@load_events) {
