@@ -226,8 +226,12 @@ sub featured_container { # just find featured events
         }
     }
 
+    # Make sure $start is included in recurrence check
+    #   (but note that $end is *not* included)
+    $start->subtract( seconds => 1 );
+
     # Check for events that fall within the range given
-    my $check_set = DateTime::Span->from_datetimes( start => $start, ($end)?( before => $end ):());
+    my $check_set = DateTime::Span->from_datetimes( after => $start, ($end)?( before => $end ):());
 
     my $tag = lc $ctx->stash('tag');
 
