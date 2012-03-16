@@ -226,8 +226,8 @@ sub featured_container { # just find featured events
         }
     }
 
-    # first check for repeating events that fall within the range given
-    my $check_set = DateTime::Span->from_datetimes( start => $start, ($end)?( end => $end ):());
+    # Check for events that fall within the range given
+    my $check_set = DateTime::Span->from_datetimes( start => $start, ($end)?( before => $end ):());
 
     my $tag = lc $ctx->stash('tag');
 
@@ -257,8 +257,10 @@ sub featured_container { # just find featured events
 
         } else {
             my $dt = ts2datetime($event->event_date);
-            $dt->{event} = $event;
-            push @events, $dt;
+            if ($check_set->contains($dt)) {
+                $dt->{event} = $event;
+                push @events, $dt;
+            }
         }
     }
     @events = sort { $a->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch), $a) <=> $b->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch), $b) } @events;
