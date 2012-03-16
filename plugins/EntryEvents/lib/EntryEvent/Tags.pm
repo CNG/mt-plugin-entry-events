@@ -256,9 +256,10 @@ sub featured_container { # just find featured events
 
             my $event_recur = DateTime::Event::ICal->recur(%$ical);
             my $event_next = $event_recur->next($start); # just get the next recurrence of this event after $start
-            $event_next->{event} = $event;
-            push @events, $event_next;
-
+            if ( $event_next && $check_set->contains($event_next) ) {
+                $event_next->{event} = $event;
+                push @events, $event_next;
+            }
         } else {
             my $dt = ts2datetime($event->event_date);
             if ($check_set->contains($dt)) {
