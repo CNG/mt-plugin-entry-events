@@ -208,13 +208,26 @@ sub featured_container { # just find featured events
 
     my $limit = $args->{limit};
     my $start = $args->{start} || epoch2ts($blog, time);
+    my $end   = $args->{end};
 
-    # start is passed as YYYYMMDDHHMMSS so parse that to a DateTime obj
+    # start & end are passed as YYYYMMDDHHMMSS so parse them to a DateTime obj
     $start = ts2datetime($start);
+    if ($end) {
+        $end = ts2datetime($end);
+    } else {
+        if ($args->{days}) {
+            $end = $start->clone;
+            my $days = $args->{days};
+            $end->add( days => $days );
+        } elsif (!$args->{no_end}) { # we can explicitly pass in a "no_end" var here to NOT limit things, else..
+            # if $end isn't passed and $days isn't set, we want to limit to 7 days by default
+            $end = $start->clone;
+            $end->add( days => 7 );
+        }
+    }
 
-
-    my $check_set = DateTime::Span->from_datetimes( start => $start );
-
+    # first check for repeating events that fall within the range given
+    my $check_set = DateTime::Span->from_datetimes( start => $start, ($end)?( end => $end ):());
 
     my $tag = lc $ctx->stash('tag');
 
