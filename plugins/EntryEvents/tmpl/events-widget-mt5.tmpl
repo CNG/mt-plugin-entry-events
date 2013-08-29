@@ -3,11 +3,15 @@
         id="entry-event-widget"
         label="<__trans phrase="Events">">
         <style type="text/css">
-            .event-calendar{background:white none repeat scroll 0%;padding:6px;width:160px; margin: 0px auto;}
+            .event-calendar{background:white none repeat scroll 0%;padding:6px;width:160px; margin: 0px auto;overflow: hidden;}
             .calendar-days li.recurrence { background-color:#f93; }
+            #event_date-field .field-header {width:5em; margin-left:0.4em; padding-top:0px; padding-bottom:0px;}
+            #event_date-field .field-content {margin-left:6em; padding-top:0px; padding-bottom:0px;}
+            #event-hour, #event-minute, #event-ampm {padding: 0px;}
         </style>
         <div id="event-calendar" class="<mt:unless name="event_date">hidden</mt:unless>">
             <div id="event-calendar-content" class="calendar-content event-calendar pkg"></div>
+        <br clear="all" />
         <div id="event_date-field" class="field field-left-label pkg ">
             <div class="field-inner">
                 <div class="field-header"><label for="event-calendar-date-input">Date</label></div> <div class="field-content"><span id="event-date-visible"><mt:if name="event_date"><mt:var name="event_date"><mt:else>choose a date above</mt:if></span><input type="hidden" name="event-date" id="event-calendar-date-input" value="<mt:var name="event_date">"></div><br clear="all" />
