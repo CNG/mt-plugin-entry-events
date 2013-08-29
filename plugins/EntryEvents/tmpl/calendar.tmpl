@@ -1,4 +1,83 @@
 <mt:setvarblock name="html_head" prepend="1">
+<style type="text/css">
+/* Calendar -------------------------------------------------------------------------------------- */
+.calendar {
+    background:white none repeat scroll 0%;
+    border:1px solid #999;
+    padding:6px;
+    position:absolute;
+    width:160px;
+}
+.calendar-content {
+    border:1px solid #33789c;
+}
+.calendar-month {
+    background-color:#33789c;
+    padding:2px 8px;
+    text-align:center;
+}
+.calendar-month a {
+    color:#fff;
+    font-size:12px;
+    line-height: 0.8;
+    text-decoration:none;
+}
+.calendar-month h1 {
+    color:#fff;
+    font-size:10px;
+    font-weight:bold;
+    margin:0pt;
+}
+.calendar-week, .calendar-days {
+    margin:2px;
+}
+.calendar-week li, .calendar-days li {
+    -moz-user-select:none;
+    background-color:#f3f6f9;
+    border:1px solid #fff;
+    color:#333;
+    float:left;
+    font-size:11px;
+    text-align:center;
+    width:20px;
+}
+.calendar-days li {
+    background-color:#fff;
+}
+.calendar-days li.today {
+    border-color:#33789c;
+}
+.calendar-days li.future {
+    color:#ccc;
+    cursor:default;
+    padding:1px 0pt;
+}
+.calendar-days li.selected {
+    border-color:#000;
+}
+.calendar-days li a {
+    color:#333;
+    display:block;
+    padding:1px;
+    text-decoration:none;
+    width:18px;
+}
+.calendar-days li a:focus {
+    outline-color:invert;
+    outline-style:none;
+    outline-width:medium;
+}
+.calendar-ok-link {
+    width: 100%;
+    display: block;
+    margin-top: 3px;
+    text-align: center;
+}
+.pkg{display: block;}
+.pkg[class]{height: auto;}
+.left{float: left; display: inline;}
+.right{float: right;}
+</style>
 <script type="text/javascript">
     /* <![CDATA[ */
 
