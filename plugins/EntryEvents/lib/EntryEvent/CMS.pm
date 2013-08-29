@@ -25,8 +25,18 @@ sub source_edit_entry {
     my $blog_id = $app->param('blog_id');
     if ($plugin->get_config_value('show_events', 'blog:'.$blog_id)) {
         my $old = q{<div id="feedback-field"};
-        my $new_tmpl = $plugin->load_tmpl('events-widget.tmpl');
-        my $new = $new_tmpl->text;
+        my $new_tmpl;
+        my $new;
+        if ( MT->version_number < 5 ) {
+            $new_tmpl = $plugin->load_tmpl('events-widget.tmpl');
+            $new = $new_tmpl->text;
+        } else {
+            $new_tmpl = $plugin->load_tmpl('calendar.tmpl');
+            $new = $new_tmpl->text;
+            $new_tmpl = $plugin->load_tmpl('events-widget-mt5.tmpl');
+            $new .= $new_tmpl->text;
+            $new = $plugin->translate_templatized($new);
+        }
         $$tmpl =~ s/\Q$old\E/$new$old/;
     }
 
