@@ -154,7 +154,7 @@ sub entry_event_container { # a container that will return all occurrences of th
 
     # args for limit & whatnot
     my $limit = $args->{limit};
-    my $start = $args->{start} || epoch2ts(time);
+    my $start = $args->{start} || epoch2ts(undef, time);
     my $end = $args->{end};
 
     if ($start) {
