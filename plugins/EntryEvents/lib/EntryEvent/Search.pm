@@ -151,7 +151,14 @@ sub _filter_by_event {
 
     my @entry_ids;
     # Load entry events from all blogs being searched
-    my @blog_ids = keys(%{$app->{searchparam}{IncludeBlogs}});
+    my @blog_ids;
+    if ( MT->version_number < 5 ) {
+        # IncludeBlogs list is a hash_ref in MT 4
+        @blog_ids = keys(%{$app->{searchparam}{IncludeBlogs}});
+    } else {
+        # IncludeBlogs list is an array_ref in MT 5
+        @blog_ids = @{ $app->{searchparam}{IncludeBlogs} };
+    }
     my $event_iter = EntryEvent::EntryEvent->load_iter(
                         { blog_id => \@blog_ids },
                         {
