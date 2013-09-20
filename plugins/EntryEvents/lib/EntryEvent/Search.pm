@@ -42,6 +42,23 @@ sub execute {
     my $app = shift;
     my ( $terms, $args ) = @_;
 
+    # Unescape wildcards ("%") in search terms
+    if (MT->version_number >= 5.1) {
+        foreach my $term_element (@$terms) {
+            next if ref($term_element) ne 'ARRAY';
+            foreach my $search_col (@{$term_element->[0]}) {
+                if (ref($search_col) eq 'HASH') {
+                    foreach my $query_term (values(%$search_col)) {
+                        foreach my $operator (keys(%$query_term)) {
+                            $query_term->{$operator} =~ s/^%\\%%$/%%%/;
+                            my $new_term = $query_term->{$operator};
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     my $q = $app->param;
     my $event_range = $q->param('entry_events');
     my $sort_by_next_event = $q->param('SortByEntryEvent');
