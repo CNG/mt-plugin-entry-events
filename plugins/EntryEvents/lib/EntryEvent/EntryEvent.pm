@@ -68,17 +68,17 @@ sub get_next_occurrence {
     my ($time, $recurrence) = @_;
 
     unless ($time) {
-        $time = epoch2ts(undef, time);
+        $time = epoch2ts(undef, time, 1);
     }
     if ($recurrence) {
-        return epoch2ts(undef, $recurrence->epoch);
+        return epoch2ts(undef, $recurrence->epoch, 1);
     } else {
         $recurrence = $event->recurrence;
         if ($recurrence) {
             # if this event recurs, let's return the next instance of it after $time
             my $dtime = ts2datetime($time);
             my $next_recurrence = $recurrence->next($dtime);
-            return ( $next_recurrence ? (epoch2ts(undef, $next_recurrence->epoch)) : undef );
+            return ( $next_recurrence ? (epoch2ts(undef, $next_recurrence->epoch, 1)) : undef );
         } else {
             # this does not recur, so let's just spit out the next date if it's > time
             return ($event->event_date > $time)?$event->event_date:undef;

@@ -157,14 +157,14 @@ sub _filter_by_event {
     if ($days) {
         my $end_dt = $start_dt->clone;
         $end_dt->add( days => $days );
-        $end = epoch2ts(undef, $end_dt->epoch);
+        $end = epoch2ts(undef, $end_dt->epoch, 1);
         $days = undef;
     }
 
     # Make sure $start is included in recurrence check
     #   (but note that $end is *not* included)
     $start_dt->subtract( seconds => 1 );
-    $start = epoch2ts(undef, $start_dt->epoch);
+    $start = epoch2ts(undef, $start_dt->epoch, 1);
 
     my @entry_ids;
     # Load entry events from all blogs being searched

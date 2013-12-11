@@ -34,7 +34,7 @@ sub build_event_template {
     my $new_day = 0;
     for my $entry_event (@$events) {
         my $event = $entry_event->{event};
-        my $event_date = epoch2ts(undef, $entry_event->epoch);
+        my $event_date = epoch2ts(undef, $entry_event->epoch, 1);
         my $entry = MT::Entry->load($event->entry_id);
         next if $entry->status != MT::Entry::RELEASE();
         local $ctx->{__stash}{blog} = $entry->blog;
@@ -129,8 +129,8 @@ sub all_events_container { # a container to return all events in a given time pe
     }
 
     # now load the explicit set of events that occur in our defined window that we have not already picked up
-    my $ts_start = epoch2ts(undef, $start->epoch);
-    my $ts_end = (defined $end)?epoch2ts(undef, $end->epoch):undef;
+    my $ts_start = epoch2ts(undef, $start->epoch, 1);
+    my $ts_end = (defined $end)?epoch2ts(undef, $end->epoch, 1):undef;
     my @events_set = EntryEvent::EntryEvent->load({ (scalar @seen_ids)?( id => { not => \@seen_ids } ):( ), event_date => [ $ts_start, $ts_end ] }, { range => { event_date => 1 } });
     for my $e_set (@events_set) {
         my $dt = ts2datetime($e_set->event_date);
@@ -154,7 +154,7 @@ sub entry_event_container { # a container that will return all occurrences of th
 
     # args for limit & whatnot
     my $limit = $args->{limit};
-    my $start = $args->{start} || epoch2ts(undef, time);
+    my $start = $args->{start} || epoch2ts(undef, time, 1);
     my $end = $args->{end};
 
     if ($start) {
@@ -198,7 +198,7 @@ sub entry_event_container { # a container that will return all occurrences of th
         $dt->{event} = $event;
         push @events, $dt;
     }
-    @events = sort { $a->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch), $a) <=> $b->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch), $b) } @events;
+    @events = sort { $a->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch, 1), $a) <=> $b->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch, 1), $b) } @events;
     return build_event_template($ctx, $args, $cond, \@events);
 }
 
@@ -267,7 +267,7 @@ sub featured_container { # just find featured events
             }
         }
     }
-    @events = sort { $a->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch), $a) <=> $b->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch), $b) } @events;
+    @events = sort { $a->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch, 1), $a) <=> $b->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch, 1), $b) } @events;
     return build_event_template($ctx, $args, $cond, \@events);
 
 }
@@ -361,7 +361,7 @@ sub category_container { # a container to find events in a specific category
         }
     }
 
-    my $ts = epoch2ts(undef, $start->epoch);
+    my $ts = epoch2ts(undef, $start->epoch, 1);
     # sort by occurrence
     @events = sort { $a->{event}->get_next_occurrence($ts, $a) <=> $b->{event}->get_next_occurrence($ts, $b) } @events;
     return build_event_template($ctx, $args, $cond, \@events);
