@@ -154,7 +154,7 @@ sub entry_event_container { # a container that will return all occurrences of th
 
     # args for limit & whatnot
     my $limit = $args->{limit};
-    my $start = $args->{start} || epoch2ts(undef, time, 1);
+    my $start = $args->{start};
     my $end = $args->{end};
 
     if ($start) {
@@ -166,7 +166,15 @@ sub entry_event_container { # a container that will return all occurrences of th
         $end = ts2datetime($end);
     }
 
-    my $check_set = DateTime::Span->from_datetimes( start => $start, ($end)?( end => $end ):());
+    my $check_set;
+    if ($start && $end) {
+        $check_set = DateTime::Span->from_datetimes( start => $start, end => $end );
+    } elsif ($start) {
+        $check_set = DateTime::Span->from_datetimes( start => $start );
+    } elsif ($end) {
+        $check_set = DateTime::Span->from_datetimes( end => $end );
+    }
+
     my $ical = $event->ical;
     if ($ical) { # this is a recurring event, we want to push an iter of events into @events
         # doing some datetime intersection stuff with our start and end dates to find out whether our event
@@ -198,7 +206,7 @@ sub entry_event_container { # a container that will return all occurrences of th
         $dt->{event} = $event;
         push @events, $dt;
     }
-    @events = sort { $a->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch, 1), $a) <=> $b->{event}->get_next_occurrence(epoch2ts(undef, $start->epoch, 1), $b) } @events;
+    @events = sort { $a->{event}->get_next_occurrence(epoch2ts(undef, time, 1), $a) <=> $b->{event}->get_next_occurrence(epoch2ts(undef, time, 1), $b) } @events;
     return build_event_template($ctx, $args, $cond, \@events);
 }
 
